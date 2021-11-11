@@ -1,0 +1,31 @@
+from bs4 import BeautifulSoup
+import urllib3
+import sys
+import requests
+import matplotlib
+http = urllib3.PoolManager()
+urlToRead = 'http://www.google.com'
+crawledWebLinks = {}
+while urlToRead != '':
+   try:
+       urlToRead = input("Please Enter the Next URL to crawl: " )
+       if urlToRead == "":
+           print ("OK, exiting Loop")
+           break
+       shortName = input("Please Enter a short name for that URL " + urlToRead + ":")
+       response = http.request('GET', urlToRead)
+#        print(response.data)
+       dtsoup = BeautifulSoup(response.data)
+#        print(dtsoup)
+       crawledWebLinks[shortName] = dtsoup
+       print(dtsoup.text)
+   except :
+       print ("****************\nUnexpected Error*******"), sys.exc_info()[0]
+       stopOrProceed = input("Hmmm..stop or proceed? Enter 1 to Stop, enter anything else to continue")
+       if stopOrProceed == '1' :
+           print ("Okey-dokey...let's stop\n")
+           break
+       else:
+           print ("Cool! let's keep going\n ")
+           continue
+   print (crawledWebLinks.keys())
